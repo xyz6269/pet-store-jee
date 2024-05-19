@@ -1,0 +1,6 @@
+pages:
+ login/signup
+ homepage-user
+ homepage-admin
+ addpet-page
+ addrequest-page
