@@ -99,6 +99,9 @@ public class MvcController {
 //    @PreAuthorize("hasAuthority('ADMIN')")
     public String allRequests(Model model) {
         List<Request> requests = requestService.getAllRequests();
+        if (requests.isEmpty()) {
+            return "empty-requests";
+        }
         log.info(requests.toString());
         model.addAttribute("requests", requests);
         return "requests";
