@@ -34,23 +34,19 @@ public class RequestService {
         return requestRepository.findAll();
     }
 
-    public Optional<Request> findUserRequest(String email) {
-        return requestRepository.findByClientEmail(email);
+    public Request findUserRequest(String email) {
+        return requestRepository.findByClientEmail(email).orElseThrow(() -> new RuntimeException("user have no requests submitted"));
     }
 
-    public Optional<Request> findCurrentUserRequest() {
-        return findUserRequest(userService.getCurrentUserEmail());
-    }
 
-    public void deleteRequest(String email) {
-        Request request =requestRepository.findByClientEmail(email).orElseThrow(() -> new RuntimeException("Client request not found"));
+    public void deleteRequest(String id) {
+        Request request = requestRepository.findById(id).orElseThrow(() -> new RuntimeException("Client request not found"));
         requestRepository.delete(request);
     }
 
     public List<Request> findByPet(Pet pet) {
         return requestRepository.findAllByPet(pet);
     }
-
 
     public void deleteAllRequests(List<Request> requests) {
         requestRepository.deleteAll(requests);

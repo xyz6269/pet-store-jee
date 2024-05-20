@@ -51,6 +51,15 @@ public class PetService {
         return petRepository.findById(id).orElseThrow(() -> new RuntimeException("Pet not found"));
     }
 
+    public void editPet(String id, PetDto dto, MultipartFile file) throws IOException {
+        Pet pet = findPetById(id);
+        pet.setName(dto.getName());
+        pet.setAge(dto.getAge());
+        pet.setCategory(dto.getCategory());
+        pet.setImage(file.getBytes());
+        petRepository.save(pet);
+    }
+
 
 
 

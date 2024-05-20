@@ -56,7 +56,7 @@ public class MvcController {
                 return "redirect:/home";
             }
         }else {
-            return "/";
+            return "redirect:/";
         }
     }
 
@@ -80,11 +80,19 @@ public class MvcController {
     @GetMapping("/user-request")
     public String getRequest(HttpServletRequest request, Model model) {
         Cookie userId = getCurrentUserCookie(request);
-        Request request1 = requestService.findUserRequest(userId.getValue()).orElseThrow(
-                        () -> new RuntimeException("User Not Found"));
+        Request request1 = null;
+        try {
+            request1 = requestService.findUserRequest(userId.getValue());
+        } catch (RuntimeException e) {
+            return "redirect:/empty-request";
+        }
         model.addAttribute("request", request1);
-
         return "user-request";
+    }
+
+    @GetMapping("/empty-request")
+    public String emptyRequest() {
+        return "no-requests";
     }
 
     @GetMapping("/all-request")
@@ -103,26 +111,6 @@ public class MvcController {
         return "user-request";
     }
 
-    @GetMapping("/my-requests")
-    public Request getMyRequests() {
-        return requestService.findCurrentUserRequest().orElseThrow(
-                () -> new RuntimeException("you have no request submitted")
-        );
-    }
-
-    @DeleteMapping("/discard")
-    public String discard(HttpServletRequest request, Model model) {
-        Cookie userCookie = getCurrentUserCookie(request);
-        requestService.deleteRequest(userCookie.getValue());
-        return "Request Discarded";
-    }
-
-    @DeleteMapping("/delete")
-    public String deleteRequest(@PathVariable("email") String email) {
-        requestService.deleteRequest(email);
-        return "Request Discarded";
-    }
-
 
     @PostMapping("/signup")
     public String register(Model model, RegisterRequest request){
@@ -133,6 +121,18 @@ public class MvcController {
         }else{
             return "/create-acc";
         }
+    }
+
+    @RequestMapping("/add-pet")
+    public String addPet(HttpServletRequest request) {
+        Cookie userId = getCurrentUserCookie(request);
+        return "add-pet-forum";
+    }
+
+    @GetMapping("/edit-pet/{id}")
+    public String editPet(@PathVariable("id") String id, Model model, HttpServletRequest request) {
+        model.addAttribute("pet", id);
+        return "edit-page";
     }
 
 

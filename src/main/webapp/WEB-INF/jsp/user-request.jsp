@@ -36,9 +36,7 @@
                                 <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
                                     <img src="data:image/jpg;base64,<%= new String(org.apache.commons.codec.binary.Base64.encodeBase64(request1.getPet().getImage())) %>"
                                          class="w-100" alt="<%= request1.getPet().getName() %> Image" style="height: 200px; object-fit: cover;">
-                                    <a href="#!">
                                         <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
-                                    </a>
                                 </div>
                                 <!-- Image -->
                             </div>
@@ -49,12 +47,8 @@
                                 <p>Pet Category: <%= request1.getPet().getCategory() %></p>
                                 <p>Client Email: <%= request1.getClientEmail() %></p>
                                 <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm me-1 mb-2" data-mdb-tooltip-init
-                                        title="Remove item">
+                                        title="Remove item" onclick="deleteRequest('<%=request1.getId()%>')">
                                     <i class="fas fa-trash"></i>
-                                </button>
-                                <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-danger btn-sm mb-2" data-mdb-tooltip-init
-                                        title="Move to the wish list">
-                                    <i class="fas fa-heart"></i>
                                 </button>
                                 <!-- Data -->
                             </div>
@@ -72,6 +66,31 @@
         </div>
     </div>
 </section>
+
+<script>
+    function deleteRequest(id) {
+        console.log(id)
+        const url = 'http://localhost:8080/api/delete-request/' + id;
+        console.log(url)
+        const options = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+        fetch(url, options)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Problem occurred while deleting pet');
+                } else {
+                    alert("Pet deleted successfully");
+                }
+            })
+            .catch(error => {
+                alert('Error: ' + error.message);
+            });
+    }
+</script>
 
 <!-- Include Bootstrap JS (Optional) -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

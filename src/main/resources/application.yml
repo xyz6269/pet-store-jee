@@ -1,4 +1,15 @@
 spring:
+  mail:
+    host: smtp.googlemail.com
+    port: 587
+    username: medboulaamail@gmail.com
+    password: yoxk admg whfd vsvv
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   mvc:
     view:
       prefix: /WEB-INF/jsp/
